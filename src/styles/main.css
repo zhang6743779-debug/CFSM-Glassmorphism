@@ -2100,6 +2100,36 @@ a {
   }
 }
 
+/*
+ * 三网分行（fork 定制，2026-11-15）：`.node-probe--multi` 面板内纵向排多条
+ * 线路，每条 `.node-probe__line` = 头（线路名/丢包 + 数值）+ 柱区。
+ * 压过各密度档对 `.node-probe` 的 min-height（本变体按内容自适应）。
+ */
+.node-card .node-probe--multi {
+  min-height: 0;
+  gap: 5px;
+}
+
+.node-probe__line {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.node-probe__line .node-probe__bars {
+  flex: 0 0 auto;
+  min-height: 8px;
+}
+
+.node-card--mini .node-probe--multi {
+  gap: 4px;
+}
+
+.node-card--mini .node-probe__line .node-probe__bars {
+  min-height: 5px;
+}
+
 .node-tags {
   display: flex;
   max-height: 47px;
