@@ -58,6 +58,7 @@ export interface ThemeSettings {
   backgroundType: BackgroundType
   lightBackgroundUrl: string
   darkBackgroundUrl: string
+  mobileBackgroundUrl: string
   backgroundBlur: number
   backgroundOverlay: number
 }
@@ -109,6 +110,7 @@ export const THEME_SETTING_KEYS = [
   'backgroundType',
   'lightBackgroundUrl',
   'darkBackgroundUrl',
+  'mobileBackgroundUrl',
   'backgroundBlur',
   'backgroundOverlay',
 ] as const satisfies readonly (keyof ThemeSettings)[]
@@ -189,6 +191,7 @@ export const DEFAULT_THEME_SETTINGS: Readonly<ThemeSettings> = Object.freeze({
   backgroundType: 'image',
   lightBackgroundUrl: '',
   darkBackgroundUrl: '',
+  mobileBackgroundUrl: '',
   backgroundBlur: 0,
   backgroundOverlay: 0,
 })
@@ -439,6 +442,7 @@ export function normalizeThemeSettingsLayer(
     backgroundType: oneOf(input.backgroundType, ['image', 'video'], fallback.backgroundType),
     lightBackgroundUrl: backgroundSourceValue(input.lightBackgroundUrl, fallback.lightBackgroundUrl),
     darkBackgroundUrl: backgroundSourceValue(input.darkBackgroundUrl, fallback.darkBackgroundUrl),
+    mobileBackgroundUrl: backgroundSourceValue(input.mobileBackgroundUrl, fallback.mobileBackgroundUrl),
     backgroundBlur: numberValue(input.backgroundBlur, fallback.backgroundBlur, 0, 80),
     backgroundOverlay: numberValue(input.backgroundOverlay, fallback.backgroundOverlay, -100, 100),
   }
@@ -505,6 +509,7 @@ export function serializeThemeSettings(settings: ThemeSettings): Record<string, 
     backgroundType: settings.backgroundType,
     lightBackgroundUrl: settings.lightBackgroundUrl,
     darkBackgroundUrl: settings.darkBackgroundUrl,
+    mobileBackgroundUrl: settings.mobileBackgroundUrl,
     backgroundBlur: settings.backgroundBlur,
     backgroundOverlay: settings.backgroundOverlay,
   }

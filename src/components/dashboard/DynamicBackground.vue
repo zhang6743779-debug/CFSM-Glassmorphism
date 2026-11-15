@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useMediaQuery } from '@vueuse/core'
 import defaultBackground from '@/assets/background/default-background-v2.webp'
 import { useBackgroundMedia } from '@/composables/use-background-media'
 import { useThemeSettingsStore } from '@/stores/theme-settings'
@@ -10,12 +11,18 @@ import { resolveBackgroundSource } from '@/theme/settings'
  * local: 地址解析、配置返回前的冷启动请求门，以及无 Referer 的图片请求。
  */
 const theme = useThemeSettingsStore()
+const isPortraitViewport = useMediaQuery('(orientation: portrait)')
 const showBackground = computed(() => theme.configResolved && theme.runtime.backgroundEnabled)
-const selectedSource = computed(() => resolveBackgroundSource(
-  theme.resolvedTheme === 'dark'
-    ? theme.runtime.darkBackgroundUrl
-    : theme.runtime.lightBackgroundUrl,
-))
+const selectedSource = computed(() => {
+  // 竖屏视口（手机）且配置了专属移动端素材时优先使用；横屏或未配置回退明暗两套
+  const mobileUrl = theme.runtime.mobileBackgroundUrl
+  if (mobileUrl && isPortraitViewport.value) return resolveBackgroundSource(mobileUrl)
+  return resolveBackgroundSource(
+    theme.resolvedTheme === 'dark'
+      ? theme.runtime.darkBackgroundUrl
+      : theme.runtime.lightBackgroundUrl,
+  )
+})
 const currentUrl = computed(() => showBackground.value ? selectedSource.value : '')
 const backgroundType = computed(() => theme.runtime.backgroundType)
 const blur = computed(() => theme.runtime.backgroundBlur)
