@@ -67,6 +67,31 @@
 }
 
 /*
+ * 手机竖屏：竖屏视频人物居中，卡片压低表面不透明度让人物透出
+ * （亮 74%→30%、暗 85%→45%），毛玻璃模糊同步减弱。桌面横屏不受影响。
+ */
+@media (orientation: portrait) {
+  :root {
+    --card-surface: rgb(241 245 249 / 30%);
+    --card-surface-hover: rgb(248 250 252 / 38%);
+  }
+
+  :root[data-theme='dark'] {
+    --card-surface: rgb(13 17 26 / 45%);
+    --card-surface-hover: rgb(17 24 39 / 55%);
+  }
+
+  .node-card {
+    backdrop-filter: blur(8px) saturate(145%);
+    -webkit-backdrop-filter: blur(8px) saturate(145%);
+  }
+
+  .overview-card {
+    background: color-mix(in oklab, var(--background) 22%, transparent);
+  }
+}
+
+/*
  * Komari 的 `--background`，逐字移植。总览卡片的表面就是它的 50% 透明版本
  * （上游类名 `bg-background/50`，hover 变成不透明的 `bg-background`）。
  * 只服务总览卡片，页面底色仍由 `--page` 与背景层负责。
@@ -918,17 +943,16 @@ a {
 }
 
 /*
- * 视频背景（桌面横屏）中人物头像始终位于画面右半：约 49.5vw 起步
- * （cover 对称裁切使该比例与窗口尺寸无关）。内容整体左移让出完整头像，
- * 卡片网格因 minmax(270px,1fr) 自然回流为每行 2 张。竖屏/窄屏不受影响。
+ * 视频背景（桌面横屏，4K 版）中人物头像位于画面左半（头部主体 17%-52%），
+ * 内容整体右移让出完整头像；卡片网格固定两列，单卡 ~295px 与原四列布局一致。
+ * 竖屏/窄屏不受影响。
  */
 @media (min-width: 1024px) and (orientation: landscape) {
   .dashboard {
-    width: min(100%, max(49vw, 560px));
-    margin: 0;
+    width: min(100%, max(48vw, 560px));
+    margin: 0 0 0 auto;
   }
 
-  /* 左移后容器 ~49vw：卡片固定两列，单卡 ~295px 与原四列布局一致 */
   .dashboard .server-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
