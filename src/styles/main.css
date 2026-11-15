@@ -917,6 +917,18 @@ a {
   padding: 0 0 40px;
 }
 
+/*
+ * 视频背景（桌面横屏）中人物头像始终位于画面右半：约 49.5vw 起步
+ * （cover 对称裁切使该比例与窗口尺寸无关）。内容整体左移让出完整头像，
+ * 卡片网格因 minmax(270px,1fr) 自然回流为每行 2 张。竖屏/窄屏不受影响。
+ */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .dashboard {
+    width: min(100%, max(49vw, 560px));
+    margin: 0;
+  }
+}
+
 .dashboard-node-info {
   padding-inline: 16px;
 }
