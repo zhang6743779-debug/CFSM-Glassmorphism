@@ -67,31 +67,6 @@
 }
 
 /*
- * 手机竖屏：竖屏视频人物居中，卡片压低表面不透明度让人物透出
- * （亮 74%→30%、暗 85%→45%），毛玻璃模糊同步减弱。桌面横屏不受影响。
- */
-@media (orientation: portrait) {
-  :root {
-    --card-surface: rgb(241 245 249 / 30%);
-    --card-surface-hover: rgb(248 250 252 / 38%);
-  }
-
-  :root[data-theme='dark'] {
-    --card-surface: rgb(13 17 26 / 45%);
-    --card-surface-hover: rgb(17 24 39 / 55%);
-  }
-
-  .node-card {
-    backdrop-filter: blur(8px) saturate(145%);
-    -webkit-backdrop-filter: blur(8px) saturate(145%);
-  }
-
-  .overview-card {
-    background: color-mix(in oklab, var(--background) 22%, transparent);
-  }
-}
-
-/*
  * Komari 的 `--background`，逐字移植。总览卡片的表面就是它的 50% 透明版本
  * （上游类名 `bg-background/50`，hover 变成不透明的 `bg-background`）。
  * 只服务总览卡片，页面底色仍由 `--page` 与背景层负责。
@@ -6190,5 +6165,39 @@ a {
 @media (min-width: 1024px) {
   .finance-dialog__rate-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/*
+ * 手机竖屏：竖屏视频人物居中，卡片表面降不透明度让人物透出
+ * （亮 74%→30%、暗 85%→45%），毛玻璃模糊同步减弱。
+ * 注意必须放文件末尾：
+ * 1) .node-card 的背景来自运行时内联写入的 --node-card-surface，
+ *    样式表 !important 才能压过内联普通声明，亮/暗两套按 data-theme 区分；
+ * 2) 同特异性规则按文件位置取胜，此块必须在原 .node-card / .overview-card 之后。
+ */
+@media (orientation: portrait) {
+  :root {
+    --card-surface: rgb(241 245 249 / 30%);
+    --card-surface-hover: rgb(248 250 252 / 38%);
+  }
+
+  :root[data-theme='dark'] {
+    --card-surface: rgb(13 17 26 / 45%);
+    --card-surface-hover: rgb(17 24 39 / 55%);
+  }
+
+  .node-card {
+    background: rgb(241 245 249 / 30%) !important;
+    backdrop-filter: blur(8px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(145%) !important;
+  }
+
+  :root[data-theme='dark'] .node-card {
+    background: rgb(13 17 26 / 45%) !important;
+  }
+
+  .overview-card {
+    background: color-mix(in oklab, var(--background) 22%, transparent) !important;
   }
 }
