@@ -927,6 +927,11 @@ a {
     width: min(100%, max(49vw, 560px));
     margin: 0;
   }
+
+  /* 左移后容器 ~49vw：卡片固定两列，单卡 ~295px 与原四列布局一致 */
+  .dashboard .server-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .dashboard-node-info {
