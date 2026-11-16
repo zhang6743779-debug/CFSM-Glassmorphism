@@ -6169,35 +6169,33 @@ a {
 }
 
 /*
- * 手机竖屏：竖屏视频人物居中，卡片表面降不透明度让人物透出
- * （亮 74%→30%、暗 85%→45%），毛玻璃模糊同步减弱。
+ * 手机竖屏：卡片表面对齐二级页面（详情页 detail-metric-card）的观感基准 ——
+ * --background 50% 透明、无毛玻璃模糊、无边框无阴影。此前只降 alpha 到 30%
+ * 但保留 blur(8px)，毛玻璃把背景视频糊成白雾，观感仍然发实、透不出视频；
+ * 详情页无模糊所以视频原样透过。变量同样改成 50% 混合（列表视图等回退生效），
+ * 明暗两套自动跟随 --background，无需分别写死。
  * 注意必须放文件末尾：
  * 1) .node-card 的背景来自运行时内联写入的 --node-card-surface，
- *    样式表 !important 才能压过内联普通声明，亮/暗两套按 data-theme 区分；
+ *    样式表 !important 才能压过内联普通声明；
  * 2) 同特异性规则按文件位置取胜，此块必须在原 .node-card / .overview-card 之后。
  */
 @media (orientation: portrait) {
   :root {
-    --card-surface: rgb(241 245 249 / 30%);
-    --card-surface-hover: rgb(248 250 252 / 38%);
-  }
-
-  :root[data-theme='dark'] {
-    --card-surface: rgb(13 17 26 / 45%);
-    --card-surface-hover: rgb(17 24 39 / 55%);
+    --card-surface: color-mix(in oklab, var(--background) 50%, transparent);
+    --card-surface-hover: color-mix(in oklab, var(--background) 62%, transparent);
   }
 
   .node-card {
-    background: rgb(241 245 249 / 30%) !important;
-    backdrop-filter: blur(8px) saturate(145%) !important;
-    -webkit-backdrop-filter: blur(8px) saturate(145%) !important;
-  }
-
-  :root[data-theme='dark'] .node-card {
-    background: rgb(13 17 26 / 45%) !important;
+    background: color-mix(in oklab, var(--background) 50%, transparent) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .overview-card {
-    background: color-mix(in oklab, var(--background) 22%, transparent) !important;
+    background: color-mix(in oklab, var(--background) 50%, transparent) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
